@@ -12,7 +12,6 @@ A Aplicação realiza papéis como mensageiros e alertas para todos os tipos de 
 
 <!--- Estes são alguns exemplos de requisitos. Adicione, duplique e remove como necessário --->
 * Possuir a última versão do Node.js instalado;
-* Possuir uma máquina `<Windows/Linux/Mac>`. (Deixe claro qual SO é possível rodar a aplicação, Linux é obrigatório);
 * Ler a documentação da API do Discord e dos termos de uso;
 * Ter domínio ou vontade de aprender JavaScript e um DataBase.
 
