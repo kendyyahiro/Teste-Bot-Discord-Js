@@ -1,5 +1,9 @@
 const Discord = require("discord.js");
-const bot = new Discord.Client();
+const bot = new Discord.Client();  //Fazer a conexão direta com a API do Discord
+
+const config = require('./config.json');
+const links = require('./links.json');
+
 const readline = require('readline');
 var currentMin = new Date().getMinutes();
 
@@ -27,8 +31,17 @@ var tz      = data.getTimezoneOffset(); // em minutos
 var str_data = dia + '/0' + (mes+1);
 var str_hora = hora + ':' + min;
 
-// Mostra o resultado
+/*Receber membros novos no nosso canal Pet-Sistemas*/
+bot.on("guildMemberAdd", member =>{
+  member.guild.channels.get('666362832392159289').send(member.user.username + ' entrou no server!');
+  member.send('Bem-vindo ao servidor!');
+});
 
+bot.on("guildMemberRemove", member =>{
+  member.guild.channels.get('666362832392159289').send(member.user.username + ' saiu no server!');
+  member.send('Bem-vindo ao servidor!');
+});
+/*Inicializar o bot*/
 bot.on("ready", member => {
 
   var testChannel = bot.channels.find(channel => channel.id === '680494579723665532');
@@ -39,13 +52,20 @@ bot.on("ready", member => {
   if(str_hora === '16:19' && str_data === '21/02'){
     console.log("OK!");
   }
-  setInterval(() => { testChannel.send("Teste de chamada para cada servidor")}, 604800000);
+  setInterval(() => { testChannel.send("Teste de chamada para cada servidor")}, 1000);
 });
-/*
-bot.on("message", mensagem => {
-  if(str_hora === '15:54:0'){
-    testChannel.send("Teste de chamada para cada servidor");
+
+/*Enviar mensagem*/
+bot.on('message', message => {
+  responseObject = links;
+  if(responseObject[message.content]){
+    message.channel.send(responseObject[message.content]);
   }
-})
-*/
-bot.login("Njc0NDgyOTQ2NDY3NjkyNTY1.XkQZxw.CMUQ_AcfUuB4gKjljbxxcUyU_10")
+
+  if(message.content.startsWith(config.prefix + 'ping')){
+    message.reply('pong');
+    message.channel.send('pong2');
+  }
+});
+
+bot.login("Njc0NDgyOTQ2NDY3NjkyNTY1.XmFYrg.7avMmRUNwb4eJYz-GP02rxjxz4E")
