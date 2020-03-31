@@ -19,7 +19,8 @@ A Aplicação realiza papéis como mensageiros e alertas para todos os tipos de 
 
 Para fazer o deploy da aplicação siga os seguintes passos:
 - Acessar a pasta e apenas colocar o código para funcionar, utilize o Visual Studio para executar
-- Usei node pra desenvolver o Bot, então apenas use: node .
+- Usei node pra desenvolver o Bot, então apenas use: npm run dev
+- Para gerar o build da  aplicação, rodar: npm run build
 - Teste as funcionalidades presentes no código
 
 ## Usando a API do Discord:
@@ -29,7 +30,7 @@ Para usar a API do Discord, siga os seguintes passos:
 * Abra o navegador e digite o seguinte endereço: https://discordapp.com
 * Crie um bot e copie o TOKEN dele.
 * Crie também um canal no Discord para adicionar o bot criado
-* Copie e cole esse endereço: discordapp.com/oauth2/authorize?=&client_id=###&scope=bot&permissions=8 e substitua os 3 # pelo ID do seu canal
+* Copie e cole esse endereço: discordapp.com/oauth2/authorize?=&client_id=###&scope=bot&permissions=8 e substitua os 3 # pelo  client ID do seu canal
 * Ao abrir a aplicação você poderá:
   * Adicionar alertas
   * Armazenar informações, arquivos, etc... em um banco de dados

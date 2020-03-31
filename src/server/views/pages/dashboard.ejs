@@ -1,0 +1,36 @@
+<%- contentFor('body') %>
+<div>
+    <form action="" >
+       <div class="input-field col s12">
+           <select>
+
+            <option selected >seila</option>
+
+            <% users.cache.forEach(function(user){  %>
+                <% if(!user.bot){  %>
+                        <option value="<%= user.username %>"  ><%= user.username %></option>
+                    <% } %>
+                <% }) %>
+            </select>
+
+        
+
+        </div>
+
+    </form>
+  
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems, options);
+  });
+
+  // Or with jQuery
+
+  $(document).ready(function(){
+    $('select').formSelect();
+  });
+</script>

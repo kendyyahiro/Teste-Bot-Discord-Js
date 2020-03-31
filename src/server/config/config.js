@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import expressLayout  from 'express-ejs-layouts';
-import path from 'path';
 
 const server = express();
 

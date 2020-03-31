@@ -1,67 +1,106 @@
-const Discord = require("discord.js");
-const bot = new Discord.Client();  //Fazer a conexão direta com a API do Discord
-const hook = new Discord.WebhookClient('691878829526089818', 'r8b91cNRiDvtuChOD6Rb5ojG3oImZNBLQ2vMDfFJf74rwNX0qLMggpe8kFrYIon0qe-O');
+import dotenv from "dotenv";
+dotenv.config();
+import Discord, { MessageAttachment } from "discord.js";
+import fs from "fs";
 
-const config = require('./config.json');
-const links = require('./commands.json');
+const token = process.env.TOKEN;
+const prefix = process.env.PREFIX;
+const bot = new Discord.Client(); //Fazer a conexão direta com a API do Discord
+/*************************************************************** */
+console.log(fs.readdirSync("./src/bot/commands"));
 
-const readline = require('readline');
-var currentMin = new Date().getMinutes();
+bot.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync("./src/bot/commands").filter(file => file.endsWith('.js'));
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  /*************************************************************** */
-var data = new Date();
-var dias = new Array('domingo','segunda','terça','quarta','quinta','sexta','sábado');
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	bot.commands.set(command.name, command);
+}
 
-var dia     = data.getDate();           // 1-31
-var dia_sem = data.getDay();            // 0-6 (zero=domingo)
-var mes     = data.getMonth();          // 0-11 (zero=janeiro)
-var ano2    = data.getYear();           // 2 dígitos
-var ano4    = data.getFullYear();       // 4 dígitos
-var hora    = data.getHours();          // 0-23
-var min     = data.getMinutes();        // 0-59
-var seg     = data.getSeconds();        // 0-59
-var mseg    = data.getMilliseconds();   // 0-999
-var tz      = data.getTimezoneOffset(); // em minutos
 
-// Formata a data e a hora (note o mês + 1)
-var str_data = dia + '/0' + (mes+1);
-var str_hora = hora + ':' + min;
 
-/*Receber membros novos no nosso canal Pet-Sistemas*/
-bot.on("guildMemberAdd", member =>{
-  member.guild.channels.get('666362832392159289').send(member.user.username + ' entrou no server!');
-  member.send('Bem-vindo ao servidor!');
+bot.on("guildMemberAdd", member => {
+  member.guild.channels
+    .get("666362832392159289")
+    .send(member.user.username + " entrou no server!");
+  member.send("Bem-vindo ao servidor!");
 });
 
-bot.on("guildMemberRemove", member =>{
-  member.guild.channels.get('666362832392159289').send(member.user.username + ' saiu no server!');
-  member.send('Bem-vindo ao servidor!');
+bot.on("guildMemberRemove", member => {
+  member.guild.channels
+    .get("666362832392159289")
+    .send(member.user.username + " saiu no server!");
+  member.send("Bem-vindo ao servidor!");
 });
 /*Inicializar o bot*/
-bot.on("ready", member => {
+bot.on("ready", async () => {
+  bot.user.setActivity("seila");
 
-  var testChannel = bot.channels.find(channel => channel.id === '680494579723665532');
-  console.log("The Bot Server is logged in.");
-  console.log(str_hora);
-  console.log(str_data);
+  bot.channels.cache.forEach(el => {
+    if (el.type === "text") {
+      console.log(el);
+    }
+  });
 
-  if(str_hora === '16:19' && str_data === '21/02'){
-    console.log("OK!");
-  }
-  //setInterval(() => { testChannel.send("Teste de chamada para cada servidor")}, 1000);
+  bot.guilds.cache.forEach(el => {
+    console.log(el.name);
+    console.log(el.memberCount);
+  });
 });
 
 /*Enviar mensagem*/
-bot.on('message', message => {
-  responseObject = links;
-  if(responseObject[message.content]){
-    message.channel.send(responseObject[message.content]);
-    hook.send("teste");
+bot.on("message", message => {
+  const embed = new Discord.MessageEmbed()
+  // Set the color of the embed
+  .setColor(0xa626a6);
+  // Set the main content of the embed
+  //.setDescription('Descricao do Projeto teste');
+// Send the embed to the same channel as the message 
+  if (message.content.toLowerCase().startsWith(`${prefix}initscrumproject`)) {
+    console.log(message.content.slice(18));
+    let nameProject = message.content.slice(18)
+    embed.setTitle(nameProject);
+    console.log(nameProject.length);
+    
+    if(nameProject.length <= 0 ) {
+      console.log('aqui');
+      
+      embed.setTitle("O Projeto deve ter um nome ")
+      message.channel.send(embed)
+      return
+    
+    }
+  const descriptionProject = "";
+ 
+  //message.channel.send("Funcionou Otario")
+    bot.commands.get('initScrum').execute(message,bot,nameProject, descriptionProject,embed)
+   }
+
+  if (message.author.bot) return;
+
+  if (message.content.toLowerCase().startsWith(`${prefix}lucas`)) {
+
+     message.guild.channels.cache.forEach(el => {
+       if(el.type == "text"){
+        message.channel.send(el.name);
+        if(el.name === "grupos-pet"){
+          el.delete();
+        }
+       }
+     });
+    message.channel.send("Ban Lucas");
+  }
+  if (message.content.startsWith(`${prefix}kaio`)) {
+    message.channel.send("Ban Kaio");
+  }
+  if (message.content.startsWith(`${prefix}Vinicius`)) {
+    message.channel.send("Ban Vinicius");
+  }
+  if (message.content.startsWith(`${prefix}Gustavo`)) {
+    message.channel.send("Ban Gustavo");
   }
 });
 
-bot.login(config.token);
+bot.login(token);
+
+export default bot;
